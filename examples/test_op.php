@@ -1,8 +1,8 @@
 <?php
-require_once("TensorFlow.php");
+require_once __DIR__ . '/../vendor/autoload.php';
 
 function test_shape($val) {
-	$tf = new TensorFlow();
+	$tf = new TensorFlow\TensorFlow();
 	$sess = $tf->session();
 
 	$ret = $sess->run(
@@ -17,7 +17,7 @@ test_shape([1,2]);
 test_shape([[1,2,3],[4,5,6]]);
 
 function test_stringJoin($val1, $val2) {
-	$tf = new TensorFlow();
+	$tf = new TensorFlow\TensorFlow();
 	$sess = $tf->session();
 
 	$join = $tf->op("StringJoin",

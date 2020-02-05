@@ -1,7 +1,7 @@
 <?php
-require_once("TensorFlow.php");
+require_once __DIR__ . '/../vendor/autoload.php';
 
-$tf = new TensorFlow();
+$tf = new TensorFlow\TensorFlow();
 printf("Hello from TensorFlow C library version %s\n", $tf->version());
 
 $sess = $tf->session();
@@ -43,7 +43,7 @@ var_dump($ret->value());
 
 $ret = $sess->run(
 	$tf->add(
-		$tf->placeholder("x", \TF\DOUBLE),
-		$tf->placeholder("y", \TF\DOUBLE)),
+		$tf->placeholder("x", TensorFlow\API::DOUBLE),
+		$tf->placeholder("y", TensorFlow\API::DOUBLE)),
 		["x" => $tf->tensor(42.0), "y" => $tf->tensor(5.0)]);
 var_dump($ret->value());

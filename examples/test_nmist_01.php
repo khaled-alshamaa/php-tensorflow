@@ -5,15 +5,14 @@
  * See: http://yann.lecun.com/exdb/mnist/
  *
  */
-require_once("TensorFlow.php");
-require_once("PrintGraph.php");
+require_once __DIR__ . '/../vendor/autoload.php';
 
-const MODEL       = './models/mnist_500_500_softmax_linear';
-const TEST_IMAGES = './datasets/mnist/t10k-images-idx3-ubyte.gz';
-const TEST_LABELS = './datasets/mnist/t10k-labels-idx1-ubyte.gz';
+const MODEL       = __DIR__ . '/../models/mnist_500_500_softmax_linear';
+const TEST_IMAGES = __DIR__ . '/../datasets/mnist/t10k-images-idx3-ubyte.gz';
+const TEST_LABELS = __DIR__ . '/../datasets/mnist/t10k-labels-idx1-ubyte.gz';
 
 function main() {
-	$tf = new TensorFlow();
+	$tf = new TensorFlow\TensorFlow();
 	/* Load Session */
 	$sess = $tf->loadSavedModel(MODEL);
 	/* Output of the loaded Neural Networ */
@@ -21,7 +20,7 @@ function main() {
 	/* Index of the top value */
 	$out_label =
 		$tf->op('Reshape', [
-			$tf->op('TopKV2', [$out, $tf->constant(1, \TF\INT32)], [], [], null, 1),
+			$tf->op('TopKV2', [$out, $tf->constant(1, TensorFlow\API::INT32)], [], [], null, 1),
 			$tf->constant([-1])]);
 	//print_graph($tf->graph);
 	/* Recognation */
@@ -46,7 +45,7 @@ function get_images($tf) {
 	gzclose($f);
 	$pixels = $rows * $cols;
 	$n = 0;
-	$ret = $tf->tensor(null, \TF\FLOAT, [$num_images, $pixels]);
+	$ret = $tf->tensor(null, TensorFlow\API::FLOAT, [$num_images, $pixels]);
 	$data = $ret->data();
 	for ($i = 0; $i < $num_images; $i++) {
 		for ($j = 0; $j < $pixels; $j++) {
@@ -69,7 +68,7 @@ function get_labels($tf) {
 	$num_items = read32($f);
 	$s = gzread($f, $num_items);
 	gzclose($f);
-	$ret = $tf->tensor(null, \TF\INT32, [$num_items]);
+	$ret = $tf->tensor(null, TensorFlow\API::INT32, [$num_items]);
 	$data = $ret->data();
 	for ($i = 0; $i < $num_items; $i++) {
 		$data[$i] = ord($s[$i]);
